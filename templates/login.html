@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NAU Directory - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 100px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; }
+        .error { color: red; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Access Directory</h2>
+    <h3 style="color: #666; font-weight: normal; margin-top: 5px; margin-bottom: 20px;">Newish Adults Unite - October 9, 2025</h3>
+    <form method="post">
+        <div class="form-group">
+            <input type="tel" name="phone" placeholder="Enter your phone number" required>
+        </div>
+        <button type="submit">Access Directory</button>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+    </form>
+</body>
+</html>

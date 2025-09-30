@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NAU Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .contact { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px; 
+            margin: 5px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .name { font-weight: bold; font-size: 16px; }
+        .phone { font-family: monospace; font-size: 14px; }
+        .copy-btn { 
+            padding: 8px 12px; 
+            background: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 3px; 
+            cursor: pointer; 
+        }
+        .copy-btn:hover { background: #218838; }
+        .logout { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h2>Directory</h2>
+            <h3 style="color: #666; font-weight: normal; margin-top: 5px; margin-bottom: 0;">Newish Adults Unite - October 9, 2025</h3>
+        </div>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+    
+    {% for attendee in attendees %}
+    <div class="contact">
+        <div>
+            <div class="name">{{ attendee.name }}</div>
+            <div class="phone">{{ attendee.phone }}</div>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
+            Copy phone
+        </button>
+    </div>
+    {% endfor %}
+
+    <script>
+        function copyToClipboard(text, contactPhone, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Log the copy event to server
+                fetch('/copy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `contact=${contactPhone}`
+                }).catch(err => console.log('Logging failed:', err));
+                
+                // Update button UI
+                let original = button.textContent;
+                button.textContent = "Copied!";
+                button.style.background = "#28a745";
+                setTimeout(() => {
+                    button.textContent = original;
+                }, 1000);
+            });
+        }
+    </script>
+</body>
+</html>
