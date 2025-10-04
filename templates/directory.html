@@ -3,53 +3,207 @@
 <head>
     <title>NAU Directory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Roboto Serif', serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header { 
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .header-top {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        h3 {
+            color: #7f8c8d;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        
+        .logout { 
+            color: #6c757d; 
+            text-decoration: none; 
+            font-weight: 500;
+            font-size: 14px;
+            padding: 6px 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+        
+        .logout:hover {
+            color: #bef9b4;
+            border-color: #bef9b4;
+            background: white;
+        }
+        
+        .countdown { 
+            background: #f8f9fa; 
+            border: 1px solid #e9ecef; 
+            border-radius: 8px; 
+            padding: 15px; 
+            text-align: center;
+        }
+        
+        .countdown-title { 
+            font-size: 14px; 
+            color: #6c757d; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+        }
+        
+        .countdown-timer { 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: #094d92; 
+        }
+        
+        .countdown-expired { 
+            color: #dc3545; 
+            font-weight: 700; 
+        }
+        
+        .contacts-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
         .contact { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 15px; 
-            margin: 5px 0; 
-            border: 1px solid #ddd; 
-            border-radius: 5px;
-            background: #f9f9f9;
+            padding: 20px; 
+            margin-bottom: 12px; 
+            border: 1px solid #e9ecef; 
+            border-radius: 8px;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
         }
-        .name { font-weight: bold; font-size: 16px; }
-        .phone { font-family: monospace; font-size: 14px; }
+        
+        .contact:hover {
+            background: #e9ecef;
+            border-color: #bef9b4;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 0; /* Allows text to wrap */
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 600px) {
+            .contact {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            
+            .contact-info {
+                text-align: center;
+            }
+            
+            .copy-btn {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+        
+        .name { 
+            font-weight: 600; 
+            font-size: 18px; 
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .phone { 
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
+            font-size: 16px; 
+            color: #6c757d;
+        }
+        
         .copy-btn { 
-            padding: 8px 12px; 
-            background: #28a745; 
-            color: white; 
+            padding: 10px 16px; 
+            background: #bef9b4; 
+            color: #2c3e50; 
             border: none; 
-            border-radius: 3px; 
+            border-radius: 6px; 
             cursor: pointer; 
+            font-weight: 500;
+            transition: background-color 0.2s ease;
         }
-        .copy-btn:hover { background: #218838; }
-        .logout { color: #007bff; text-decoration: none; }
+        
+        .copy-btn:hover { 
+            background: #a8f59c; 
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div>
-            <h2>Directory</h2>
-            <h3 style="color: #666; font-weight: normal; margin-top: 5px; margin-bottom: 0;">Newish Adults Unite - October 9, 2025</h3>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div>
+                    <h2>Directory</h2>
+                    <h3>Newish Adults Unite<br>October 9, 2025</h3>
+                </div>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+            
+            <div class="countdown">
+                <div class="countdown-title">Directory expires in:</div>
+                <div class="countdown-timer" id="countdown">Loading...</div>
+            </div>
         </div>
-        <a href="/logout" class="logout">Logout</a>
-    </div>
-    
-    {% for attendee in attendees %}
-    <div class="contact">
-        <div>
-            <div class="name">{{ attendee.name }}</div>
-            <div class="phone">{{ attendee.phone }}</div>
+        
+        <div class="contacts-container">
+            {% for attendee in attendees %}
+            <div class="contact">
+                <div class="contact-info">
+                    <div class="name">{{ attendee.name }}</div>
+                    <div class="phone">{{ attendee.phone }}</div>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
+                    Copy phone
+                </button>
+            </div>
+            {% endfor %}
         </div>
-        <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
-            Copy phone
-        </button>
     </div>
-    {% endfor %}
 
     <script>
         function copyToClipboard(text, contactPhone, button) {
@@ -72,6 +226,45 @@
                 }, 1000);
             });
         }
+        
+        function updateCountdown() {
+            fetch('/api/expiration')
+                .then(response => response.json())
+                .then(data => {
+                    const countdownElement = document.getElementById('countdown');
+                    
+                    if (data.expired) {
+                        countdownElement.innerHTML = '<span class="countdown-expired">Directory has expired</span>';
+                        // Redirect to expired page after a short delay
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                        return;
+                    }
+                    
+                    const seconds = data.seconds_until_expiration;
+                    const days = Math.floor(seconds / 86400);
+                    const hours = Math.floor((seconds % 86400) / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    const secs = seconds % 60;
+                    
+                    let timeString = '';
+                    if (days > 0) timeString += `${days}d `;
+                    if (hours > 0) timeString += `${hours}h `;
+                    if (minutes > 0) timeString += `${minutes}m `;
+                    timeString += `${secs}s`;
+                    
+                    countdownElement.textContent = timeString;
+                })
+                .catch(error => {
+                    console.error('Error fetching expiration data:', error);
+                    document.getElementById('countdown').textContent = 'Error loading countdown';
+                });
+        }
+        
+        // Update countdown immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>

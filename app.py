@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify, g
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
@@ -8,6 +8,10 @@ app.secret_key = 'your-secret-key-change-this'  # Change this!
 
 # Database file path
 DB_PATH = 'nau_logs.db'
+
+# Directory expiration configuration
+# Set this to your desired expiration date/time (UTC)
+DIRECTORY_EXPIRATION = datetime(2024, 10, 11, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
@@ -67,6 +71,16 @@ def normalize_phone(phone_str):
         return f"+{digits}"
     return None
 
+def is_directory_expired():
+    """Check if the directory has expired"""
+    return datetime.now(timezone.utc) > DIRECTORY_EXPIRATION
+
+def get_time_until_expiration():
+    """Get seconds until expiration (negative if expired)"""
+    now = datetime.now(timezone.utc)
+    delta = DIRECTORY_EXPIRATION - now
+    return int(delta.total_seconds())
+
 # Initialize database on startup
 @app.before_request
 def before_request():
@@ -74,6 +88,10 @@ def before_request():
 
 @app.route("/")
 def home():
+    # Check if directory has expired
+    if is_directory_expired():
+        return render_template('expired.html')
+    
     phone = session.get('phone')
     # Check if phone matches any attendee's normalized phone
     if not phone or not any(normalize_phone(attendee_phone) == phone for attendee_phone in ATTENDEES.keys()):
@@ -90,6 +108,10 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # Check if directory has expired
+    if is_directory_expired():
+        return render_template('expired.html')
+    
     if request.method == "POST":
         phone_raw = request.form.get('phone', '')
         phone_normalized = normalize_phone(phone_raw)
@@ -118,6 +140,15 @@ def copy_contact():
     log_event('phone_copied', phone)
     
     return jsonify({"success": True})
+
+@app.route("/api/expiration")
+def get_expiration_status():
+    """API endpoint to get expiration status and countdown"""
+    return jsonify({
+        "expired": is_directory_expired(),
+        "seconds_until_expiration": get_time_until_expiration(),
+        "expiration_date": DIRECTORY_EXPIRATION.isoformat()
+    })
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
