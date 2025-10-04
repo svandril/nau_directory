@@ -1,4 +1,5 @@
-import sqlite3
+import psycopg2
+import psycopg2.extras
 import os
 from datetime import datetime, timezone
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify, g
@@ -6,8 +7,8 @@ from flask import Flask, request, render_template, session, redirect, url_for, j
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.secret_key = 'your-secret-key-change-this'  # Change this!
 
-# Database file path
-DB_PATH = 'nau_logs.db'
+# Database configuration
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost/nau_logs')
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
@@ -16,33 +17,34 @@ DIRECTORY_EXPIRATION = datetime(2025, 10, 11, 6, 59, 59, tzinfo=timezone.utc)  #
 def get_db():
     """Get database connection"""
     if 'db' not in g:
-        g.db = sqlite3.connect(DB_PATH)
-        g.db.row_factory = sqlite3.Row
+        g.db = psycopg2.connect(DATABASE_URL)
+        g.db.autocommit = True
     return g.db
 
 def init_logging_db():
     """Initialize the logging database"""
     db = get_db()
-    db.execute('''
+    cursor = db.cursor()
+    cursor.execute('''
         CREATE TABLE IF NOT EXISTS logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            event_type TEXT NOT NULL,
-            phone TEXT,
+            id SERIAL PRIMARY KEY,
+            event_type VARCHAR(255) NOT NULL,
+            phone VARCHAR(20),
             user_agent TEXT,
-            timestamp TEXT NOT NULL
+            timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
         )
     ''')
-    db.commit()
+    cursor.close()
 
 def log_event(event_type, phone=None):
     """Log an event to the database"""
     db = get_db()
-    timestamp = db.now().isoformat() if hasattr(db, 'now') else datetime.now().isoformat()
-    db.execute(
-        'INSERT INTO logs (event_type, phone, user_agent, timestamp) VALUES (?, ?, ?, ?)',
-        (event_type, phone, request.headers.get('User-Agent', ''), datetime.now().isoformat())
+    cursor = db.cursor()
+    cursor.execute(
+        'INSERT INTO logs (event_type, phone, user_agent, timestamp) VALUES (%s, %s, %s, %s)',
+        (event_type, phone, request.headers.get('User-Agent', ''), datetime.now(timezone.utc))
     )
-    db.commit()
+    cursor.close()
 
 @app.teardown_appcontext
 def close_db(exception=None):
@@ -149,6 +151,7 @@ def get_expiration_status():
         "seconds_until_expiration": get_time_until_expiration(),
         "expiration_date": DIRECTORY_EXPIRATION.isoformat()
     })
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
