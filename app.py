@@ -8,7 +8,10 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 app.secret_key = 'your-secret-key-change-this'  # Change this!
 
 # Database configuration
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost/nau_logs')
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if not DATABASE_URL:
+    print("Warning: DATABASE_URL not set. Logging will be disabled.")
+    DATABASE_URL = None
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
@@ -16,35 +19,57 @@ DIRECTORY_EXPIRATION = datetime(2025, 10, 11, 6, 59, 59, tzinfo=timezone.utc)  #
 
 def get_db():
     """Get database connection"""
+    if DATABASE_URL is None:
+        return None
+        
     if 'db' not in g:
-        g.db = psycopg2.connect(DATABASE_URL)
-        g.db.autocommit = True
+        try:
+            g.db = psycopg2.connect(DATABASE_URL)
+            g.db.autocommit = True
+        except psycopg2.Error as e:
+            print(f"Database connection error: {e}")
+            # Return None to handle gracefully
+            return None
     return g.db
 
 def init_logging_db():
     """Initialize the logging database"""
     db = get_db()
-    cursor = db.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS logs (
-            id SERIAL PRIMARY KEY,
-            event_type VARCHAR(255) NOT NULL,
-            phone VARCHAR(20),
-            user_agent TEXT,
-            timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-        )
-    ''')
-    cursor.close()
+    if db is None:
+        print("Skipping database initialization - no connection")
+        return
+    
+    try:
+        cursor = db.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS logs (
+                id SERIAL PRIMARY KEY,
+                event_type VARCHAR(255) NOT NULL,
+                phone VARCHAR(20),
+                user_agent TEXT,
+                timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+            )
+        ''')
+        cursor.close()
+    except psycopg2.Error as e:
+        print(f"Database initialization error: {e}")
 
 def log_event(event_type, phone=None):
     """Log an event to the database"""
     db = get_db()
-    cursor = db.cursor()
-    cursor.execute(
-        'INSERT INTO logs (event_type, phone, user_agent, timestamp) VALUES (%s, %s, %s, %s)',
-        (event_type, phone, request.headers.get('User-Agent', ''), datetime.now(timezone.utc))
-    )
-    cursor.close()
+    if db is None:
+        print(f"Logging skipped - no database connection: {event_type}")
+        return
+    
+    try:
+        cursor = db.cursor()
+        cursor.execute(
+            'INSERT INTO logs (event_type, phone, user_agent, timestamp) VALUES (%s, %s, %s, %s)',
+            (event_type, phone, request.headers.get('User-Agent', ''), datetime.now(timezone.utc))
+        )
+        cursor.close()
+    except psycopg2.Error as e:
+        print(f"Logging error: {e}")
 
 @app.teardown_appcontext
 def close_db(exception=None):
