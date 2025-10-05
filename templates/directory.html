@@ -155,6 +155,12 @@
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
             font-size: 16px; 
             color: #6c757d;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .phone:hover {
+            color: #094d92;
         }
         
         .copy-btn { 
@@ -195,7 +201,7 @@
             <div class="contact">
                 <div class="contact-info">
                     <div class="name">{{ attendee.name }}</div>
-                    <div class="phone">{{ attendee.phone }}</div>
+                    <div class="phone" onclick="trackPhoneClick('{{ attendee.phone }}', '{{ attendee.name }}')">{{ attendee.phone }}</div>
                 </div>
                 <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
                     Copy phone
@@ -224,6 +230,20 @@
                     button.textContent = original;
                 }, 1000);
             });
+        }
+        
+        function trackPhoneClick(phone, name) {
+            // Log the phone click event to server
+            fetch('/log-phone-click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `phone=${phone}&name=${encodeURIComponent(name)}`
+            }).catch(err => console.log('Phone click logging failed:', err));
+            
+            // Open the phone dialer (works on mobile)
+            window.location.href = `tel:${phone}`;
         }
         
         function updateCountdown() {

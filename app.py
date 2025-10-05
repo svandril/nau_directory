@@ -168,6 +168,20 @@ def copy_contact():
     
     return jsonify({"success": True})
 
+@app.route("/log-phone-click", methods=["POST"])
+def log_phone_click():
+    phone = session.get('phone')
+    if not phone or not any(normalize_phone(attendee_phone) == phone for attendee_phone in ATTENDEES.keys()):
+        return jsonify({"error": "Not logged in"}), 401
+    
+    clicked_phone = request.form.get('phone', '')
+    clicked_name = request.form.get('name', '')
+    
+    # Log phone click event
+    log_event('phone_clicked', phone)
+    
+    return jsonify({"success": True})
+
 @app.route("/api/expiration")
 def get_expiration_status():
     """API endpoint to get expiration status and countdown"""
