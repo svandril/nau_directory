@@ -242,8 +242,8 @@
                 body: `phone=${phone}&name=${encodeURIComponent(name)}`
             }).catch(err => console.log('Phone click logging failed:', err));
             
-            // Open the phone dialer (works on mobile)
-            window.location.href = `tel:${phone}`;
+            // Open the SMS app (works on mobile)
+            window.location.href = `sms:${phone}`;
         }
         
         function updateCountdown() {
