@@ -79,9 +79,23 @@ def close_db(exception=None):
 
 # Hardcode your directory data here instead of using a database
 ATTENDEES = {
-    "+1(555)123-4567": "John Smith",
-    "+1(555)234-5678": "Jane Doe", 
-    "+1(555)345-6789": "Bob Johnson",
+    "307-751-3953": "Zack Kawulok",
+    "408-332-2494": "Lina Saleh",
+    "347-258-0261": "Rucy Cui",
+    "727-422-0735": "Annie Ritch",
+    "858-922-2689": "Emily Petree",
+    "628-260-2470": "Manuel Meyer",
+    "408-833-8472": "Esha Dholia",
+    "424-237-6852": "Eve La Puma",
+    "650-441-8589": "Gillian Hawes",
+    "650-441-7751": "Nick Cockton",
+    "617-792-6036": "Hilary Brumberg",
+    "650-531-9217": "Joel Gibson",
+    "303-917-4375": "Reid Miller",
+    "816-824-6601": "Vivek Ramalingum",
+    "607-271-1316": "Katie Collins",
+    "847-877-3450": "Lindsay Mehl",
+    "630-804-9289": "Sean van Dril",
     # Add more attendees here: "phone": "name"
 }
 
