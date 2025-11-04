@@ -205,8 +205,14 @@ def get_expiration_status():
         "expiration_date": DIRECTORY_EXPIRATION.isoformat()
     })
 
+@app.route("/health")
+def health():
+    """Healthcheck endpoint for Railway"""
+    return jsonify({"status": "ok"}), 200
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    debug_mode = os.environ.get("FLASK_DEBUG", "True").lower() == "true"
+    # Default to False for production safety, enable with FLASK_DEBUG=True for local dev
+    debug_mode = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
     app.run(debug=debug_mode, host="0.0.0.0", port=port)
