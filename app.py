@@ -199,6 +199,11 @@ def log_phone_click():
     
     return jsonify({"success": True})
 
+@app.route("/health")
+def health():
+    """Healthcheck endpoint for Railway - must be fast and simple"""
+    return jsonify({"status": "ok"}), 200
+
 @app.route("/api/expiration")
 def get_expiration_status():
     """API endpoint to get expiration status and countdown"""
@@ -207,11 +212,6 @@ def get_expiration_status():
         "seconds_until_expiration": get_time_until_expiration(),
         "expiration_date": DIRECTORY_EXPIRATION.isoformat()
     })
-
-@app.route("/health")
-def health():
-    """Healthcheck endpoint for Railway"""
-    return jsonify({"status": "ok"}), 200
 
 
 if __name__ == "__main__":
