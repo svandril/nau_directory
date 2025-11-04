@@ -122,10 +122,9 @@ def get_time_until_expiration():
     delta = DIRECTORY_EXPIRATION - now
     return int(delta.total_seconds())
 
-# Initialize database on startup
-@app.before_request
-def before_request():
-    init_logging_db()
+# Initialize database once at startup (not on every request)
+# This runs when the app module is imported, before any requests
+init_logging_db()
 
 @app.route("/")
 def home():
