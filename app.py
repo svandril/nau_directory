@@ -34,12 +34,15 @@ def get_db():
 
 def init_logging_db():
     """Initialize the logging database"""
-    db = get_db()
-    if db is None:
+    # Create a direct connection (not using Flask's g) since this can be called
+    # at module import time before Flask application context exists
+    if DATABASE_URL is None:
         print("Skipping database initialization - no connection")
         return
     
     try:
+        db = psycopg2.connect(DATABASE_URL)
+        db.autocommit = True
         cursor = db.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS logs (
@@ -51,6 +54,7 @@ def init_logging_db():
             )
         ''')
         cursor.close()
+        db.close()
     except psycopg2.Error as e:
         print(f"Database initialization error: {e}")
 
