@@ -15,7 +15,7 @@ if not DATABASE_URL:
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
-DIRECTORY_EXPIRATION = datetime(2025, 10, 11, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
+DIRECTORY_EXPIRATION = datetime(2025, 11, 11, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
@@ -208,4 +208,5 @@ def get_expiration_status():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host="0.0.0.0", port=port)
+    debug_mode = os.environ.get("FLASK_DEBUG", "True").lower() == "true"
+    app.run(debug=debug_mode, host="0.0.0.0", port=port)

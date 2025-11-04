@@ -26,12 +26,57 @@
             margin: 0 auto;
         }
         
-        .header { 
+        .header {
+            padding: 30px 30px 12px;
+            margin-bottom: 2px; /* tighter spacing below header */
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .tips {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            padding: 24px 28px;
             margin-bottom: 20px;
+        }
+        .tips h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+        .tips-section {
+            color: #585858; /* medium gray for readability */
+        }
+        .tips-section-title {
+            font-weight: 600;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        .title-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            column-gap: 12px;
+            row-gap: 2px;
+            margin-bottom: 4px; /* adds small spacing below when stacked */
+        }
+        .countdown-pill {
+            display: inline-block;
+            background: #eef0f2;
+            border: 1px solid #e9ecef;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 6px; /* new spacing under pill */
+        }
+        .countdown-pill strong {
+            color: #2c3e50;
+            font-weight: 800;
         }
         
         .header-top {
@@ -72,37 +117,19 @@
             background: white;
         }
         
-        .countdown { 
-            background: #f8f9fa; 
-            border: 1px solid #e9ecef; 
-            border-radius: 8px; 
-            padding: 15px; 
-            text-align: center;
-        }
-        
-        .countdown-title { 
-            font-size: 14px; 
-            color: #6c757d; 
-            margin-bottom: 8px; 
-            font-weight: 500;
-        }
-        
-        .countdown-timer { 
-            font-size: 20px; 
-            font-weight: 700; 
-            color: #094d92; 
-        }
-        
-        .countdown-expired { 
-            color: #dc3545; 
-            font-weight: 700; 
-        }
-        
         .contacts-container {
+            padding: 12px 30px 30px;
+            margin-top: 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .directory-card {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            overflow: hidden; /* makes the two sections appear as a single box with unified radii */
         }
         
         .contact { 
@@ -190,23 +217,46 @@
         .copy-btn:hover { 
             background: #a8f59c; 
         }
+        .easy-hangouts div {
+            text-indent: -1.2em;
+            padding-left: 1.2em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="tips">
+            <h2>Tips</h2>
+            <div class="tips-section">
+                <div class="tips-section-title">Best times</div>
+                <div>Weekend mornings - 67%</div>
+                <div>Weekend afternoons - 43%</div>
+                <div>Weekday afternoons - 44%</div>
+            </div>
+            <div class="tips-section" style="margin-top: 14px;">
+                <div class="tips-section-title">Easy hangouts</div>
+                <div class="easy-hangouts">
+                    <div>☕ <strong>Coffee</strong> — Peet’s, Coffeebar</div>
+                    <div>🧁 <strong>Treat</strong> — Levant, Tea Friends</div>
+                    <div>🍻 <strong>Drinks</strong> — Barebottle Brewing, Bar Loretta</div>
+                    <div>🏠 <strong>Host</strong> — Dessert, watch a show, board games</div>
+                    <div>🚶 <strong>Local</strong> — Walk, Farmers market</div>
+                </div>
+            </div>
+        </div>
+        <div class="directory-card">
         <div class="header">
             <div class="header-top">
                 <div>
-                    <h2>Directory</h2>
-                    <h3>Newish Adults Unite<br>October 9, 2025</h3>
+                    <div class="title-line">
+                        <h2>Directory</h2>
+                        <span class="countdown-pill" id="countdown">Expires in <strong>--:--:--</strong></span>
+                    </div>
+                    <h3>Newish Adults Unite<br>November 6, 2025</h3>
                 </div>
                 <a href="/logout" class="logout">Logout</a>
             </div>
             
-            <div class="countdown">
-                <div class="countdown-title">Directory expires in:</div>
-                <div class="countdown-timer" id="countdown">Loading...</div>
-            </div>
         </div>
         
         <div class="contacts-container">
@@ -221,6 +271,7 @@
                 </button>
             </div>
             {% endfor %}
+        </div>
         </div>
     </div>
 
@@ -266,7 +317,7 @@
                     const countdownElement = document.getElementById('countdown');
                     
                     if (data.expired) {
-                        countdownElement.innerHTML = '<span class="countdown-expired">Directory has expired</span>';
+                        countdownElement.innerHTML = '<span class="countdown-expired">Expired</span>';
                         // Redirect to expired page after a short delay
                         setTimeout(() => {
                             window.location.reload();
@@ -275,18 +326,13 @@
                     }
                     
                     const seconds = data.seconds_until_expiration;
-                    const days = Math.floor(seconds / 86400);
-                    const hours = Math.floor((seconds % 86400) / 3600);
+                    const totalHours = Math.floor(seconds / 3600);
                     const minutes = Math.floor((seconds % 3600) / 60);
                     const secs = seconds % 60;
+                    const pad = (num) => num.toString().padStart(2, '0');
+                    const timeString = `${pad(totalHours)}:${pad(minutes)}:${pad(secs)}`;
                     
-                    let timeString = '';
-                    if (days > 0) timeString += `${days}d `;
-                    if (hours > 0) timeString += `${hours}h `;
-                    if (minutes > 0) timeString += `${minutes}m `;
-                    timeString += `${secs}s`;
-                    
-                    countdownElement.textContent = timeString;
+                    countdownElement.innerHTML = `Expires in <strong>${timeString}</strong>`;
                 })
                 .catch(error => {
                     console.error('Error fetching expiration data:', error);

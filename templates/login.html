@@ -125,7 +125,7 @@
 <body>
     <div class="container">
         <h2>Access Directory</h2>
-        <h3>Newish Adults Unite<br>October 9, 2025</h3>
+        <h3>Newish Adults Unite<br>November 6, 2025</h3>
         
         <div class="countdown">
             <div class="countdown-title">Directory expires in:</div>
@@ -156,16 +156,11 @@
                     }
                     
                     const seconds = data.seconds_until_expiration;
-                    const days = Math.floor(seconds / 86400);
-                    const hours = Math.floor((seconds % 86400) / 3600);
+                    const totalHours = Math.floor(seconds / 3600);
                     const minutes = Math.floor((seconds % 3600) / 60);
                     const secs = seconds % 60;
-                    
-                    let timeString = '';
-                    if (days > 0) timeString += `${days}d `;
-                    if (hours > 0) timeString += `${hours}h `;
-                    if (minutes > 0) timeString += `${minutes}m `;
-                    timeString += `${secs}s`;
+                    const pad = (num) => num.toString().padStart(2, '0');
+                    const timeString = `${pad(totalHours)}:${pad(minutes)}:${pad(secs)}`;
                     
                     countdownElement.textContent = timeString;
                 })
