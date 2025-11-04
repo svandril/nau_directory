@@ -26,37 +26,28 @@ def get_db():
         try:
             g.db = psycopg2.connect(DATABASE_URL)
             g.db.autocommit = True
+            # Initialize schema lazily on first connection per request context
+            if 'schema_initialized' not in g:
+                try:
+                    cursor = g.db.cursor()
+                    cursor.execute('''
+                        CREATE TABLE IF NOT EXISTS logs (
+                            id SERIAL PRIMARY KEY,
+                            event_type VARCHAR(255) NOT NULL,
+                            phone VARCHAR(20),
+                            user_agent TEXT,
+                            timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+                        )
+                    ''')
+                    cursor.close()
+                    g.schema_initialized = True
+                except psycopg2.Error as e:
+                    print(f"Schema initialization error: {e}")
         except psycopg2.Error as e:
             print(f"Database connection error: {e}")
             # Return None to handle gracefully
             return None
     return g.db
-
-def init_logging_db():
-    """Initialize the logging database"""
-    # Create a direct connection (not using Flask's g) since this can be called
-    # at module import time before Flask application context exists
-    if DATABASE_URL is None:
-        print("Skipping database initialization - no connection")
-        return
-    
-    try:
-        db = psycopg2.connect(DATABASE_URL)
-        db.autocommit = True
-        cursor = db.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS logs (
-                id SERIAL PRIMARY KEY,
-                event_type VARCHAR(255) NOT NULL,
-                phone VARCHAR(20),
-                user_agent TEXT,
-                timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-            )
-        ''')
-        cursor.close()
-        db.close()
-    except psycopg2.Error as e:
-        print(f"Database initialization error: {e}")
 
 def log_event(event_type, phone=None):
     """Log an event to the database"""
@@ -125,10 +116,6 @@ def get_time_until_expiration():
     now = datetime.now(timezone.utc)
     delta = DIRECTORY_EXPIRATION - now
     return int(delta.total_seconds())
-
-# Initialize database once at startup (not on every request)
-# This runs when the app module is imported, before any requests
-init_logging_db()
 
 @app.route("/")
 def home():
