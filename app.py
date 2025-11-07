@@ -15,7 +15,7 @@ if not DATABASE_URL:
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
-DIRECTORY_EXPIRATION = datetime(2025, 11, 11, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
+DIRECTORY_EXPIRATION = datetime(2025, 11, 8, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
@@ -75,22 +75,19 @@ def close_db(exception=None):
 # Hardcode your directory data here instead of using a database
 ATTENDEES = {
     "307-751-3953": "Zack Kawulok",
-    "408-332-2494": "Lina Saleh",
-    "347-258-0261": "Rucy Cui",
     "727-422-0735": "Annie Ritch",
     "858-922-2689": "Emily Petree",
-    "628-260-2470": "Manuel Meyer",
-    "408-833-8472": "Esha Dholia",
     "424-237-6852": "Eve La Puma",
     "650-441-8589": "Gillian Hawes",
     "650-441-7751": "Nick Cockton",
     "617-792-6036": "Hilary Brumberg",
     "650-531-9217": "Joel Gibson",
     "303-917-4375": "Reid Miller",
-    "816-824-6601": "Vivek Ramalingum",
-    "607-271-1316": "Katie Collins",
-    "847-877-3450": "Lindsay Mehl",
+    "206-240-2363": "Helen",
+    "919-946-6959": "Matt Zothner",
+    "469-426-9925": "Krithika",
     "630-804-9289": "Sean van Dril",
+    "650-609-0610": "Neetu Saini"
     # Add more attendees here: "phone": "name"
 }
 
