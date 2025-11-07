@@ -15,7 +15,7 @@ if not DATABASE_URL:
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
-DIRECTORY_EXPIRATION = datetime(2025, 11, 8, 6, 59, 59, tzinfo=timezone.utc)  # Change this date!
+DIRECTORY_EXPIRATION = datetime(2025, 11, 8, 7, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
