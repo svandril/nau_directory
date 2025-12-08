@@ -393,31 +393,31 @@ def home():
     if is_directory_expired():
         return render_template('expired.html')
     
-    phone = session.get('phone')
+    session_phone = session.get('phone')
     # Check if phone matches any attendee's normalized phone
-    if not phone or not any(normalize_phone(attendee_phone) == phone for attendee_phone in ATTENDEES.keys()):
+    if not session_phone or not any(normalize_phone(attendee_phone) == session_phone for attendee_phone in ATTENDEES.keys()):
         return redirect(url_for('login'))
     
     # Convert attendees dict to list format for template, sorted alphabetically by name
     attendees_list = []
-    for phone, attendee_data in ATTENDEES.items():
+    for attendee_phone, attendee_data in ATTENDEES.items():
         if isinstance(attendee_data, dict):
             attendees_list.append({
-                "phone": phone,
+                "phone": attendee_phone,
                 "name": attendee_data["name"],
                 "interests": attendee_data.get("interests", {})
             })
         else:
             # Backward compatibility: if it's just a string name
             attendees_list.append({
-                "phone": phone,
+                "phone": attendee_phone,
                 "name": attendee_data,
                 "interests": {}
             })
     attendees_list.sort(key=lambda x: x["name"].lower())  # Sort alphabetically (case-insensitive)
     
     # Log page access
-    log_event('directory_viewed', phone)
+    log_event('directory_viewed', session_phone)
     
     return render_template('directory.html', 
                          attendees=attendees_list, 

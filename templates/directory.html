@@ -63,20 +63,14 @@
             row-gap: 2px;
             margin-bottom: 4px; /* adds small spacing below when stacked */
         }
-        .countdown-pill {
-            display: inline-block;
-            background: #eef0f2;
-            border: 1px solid #e9ecef;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 14px;
-            color: #6c757d;
-            font-weight: 500;
-            margin-bottom: 6px; /* new spacing under pill */
+        .countdown-text {
+            color: #7f8c8d;
+            font-size: 16px;
+            font-weight: 400;
         }
-        .countdown-pill strong {
-            color: #2c3e50;
-            font-weight: 800;
+        .countdown-text strong {
+            font-weight: 600;
+            color: #000000;
         }
         
         .header-top {
@@ -201,6 +195,7 @@
             color: #6c757d;
             cursor: pointer;
             user-select: none;
+            display: inline-block;
             /* Prevent iOS from auto-converting to tel: links */
             -webkit-text-size-adjust: none;
             text-decoration: none;
@@ -239,9 +234,10 @@
         .filter-container {
             padding: 0 30px 20px;
             display: flex;
+            flex-wrap: nowrap;
             align-items: center;
             justify-content: flex-end;
-            gap: 12px;
+            column-gap: 8px;
         }
         
         .reset-filter {
@@ -250,6 +246,10 @@
             font-size: 14px;
             cursor: pointer;
             font-weight: 500;
+            white-space: normal;
+            max-width: none;
+            text-align: right;
+            line-height: 1.2;
         }
         
         .reset-filter:hover {
@@ -260,7 +260,7 @@
         .filter-pill {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 0px;
             background: #f8f9fa;
             border: 1px solid #e9ecef;
             padding: 8px 16px;
@@ -270,6 +270,10 @@
             color: #2c3e50;
             position: relative;
             user-select: none;
+        }
+        .filter-pill.active {
+            background: #e9ecef;
+            border-color: #bef9b4;
         }
         
         .filter-pill:hover {
@@ -318,7 +322,8 @@
             max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
-            min-width: 250px;
+            min-width: 100%;
+            width: 100%;
             display: none;
         }
         
@@ -442,9 +447,10 @@
         
         .interest-item {
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 0;
             padding-left: 24px;
             position: relative;
+            line-height: 1.5;
         }
         
         .interest-item.interested {
@@ -459,6 +465,8 @@
         .interest-item::before {
             position: absolute;
             left: 0;
+            top: 0.1em;
+            line-height: inherit;
         }
         
         .interest-item.interested::before {
@@ -487,9 +495,8 @@
                 <div>
                     <div class="title-line">
                         <h2>Directory</h2>
-                        <span class="countdown-pill" id="countdown">Expires in <strong>--:--:--</strong></span>
                     </div>
-                    <h3>Newish Adults Unite<br>December 9, 2025</h3>
+                    <h3>Newish Adults Unite<br>December 9, 2025<br><span class="countdown-text" id="countdown">⏳ Expires in: <strong>--:--:--</strong></span></h3>
                 </div>
                 <a href="/logout" class="logout">Logout</a>
             </div>
@@ -499,7 +506,7 @@
         <div class="filter-container" id="filterContainer">
             <a href="#" class="reset-filter" id="resetFilter" onclick="resetFilter(); return false;" style="display: none;">Reset filter</a>
             <div class="filter-pill" id="filterPill" onclick="toggleFilterDropdown(event)">
-                <span id="filterText">Hangout preferences</span>
+                <span id="filterText">Filter by hangout activities</span>
                 <span class="caret">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -539,7 +546,7 @@
                     </span>
                 </div>
                 <div class="interests-section">
-                    <div class="hangout-preferences-header">Hangout preferences</div>
+                    <div class="hangout-preferences-header">Hangout activities</div>
                     {% for category, interests_list in interest_categories.items() %}
                     <div class="interest-category">
                         <div class="interest-category-title">{{ category }}</div>
@@ -605,7 +612,7 @@
                     const countdownElement = document.getElementById('countdown');
                     
                     if (data.expired) {
-                        countdownElement.innerHTML = '<span class="countdown-expired">Expired</span>';
+                        countdownElement.innerHTML = '<strong>Expired</strong>';
                         // Redirect to expired page after a short delay
                         setTimeout(() => {
                             window.location.reload();
@@ -620,7 +627,7 @@
                     const pad = (num) => num.toString().padStart(2, '0');
                     const timeString = `${pad(totalHours)}:${pad(minutes)}:${pad(secs)}`;
                     
-                    countdownElement.innerHTML = `Expires in <strong>${timeString}</strong>`;
+                    countdownElement.innerHTML = `⏳ Expires in: <strong>${timeString}</strong>`;
                 })
                 .catch(error => {
                     console.error('Error fetching expiration data:', error);
@@ -655,6 +662,7 @@
             document.getElementById('filterText').textContent = interest;
             document.getElementById('filterPill').classList.remove('open');
             document.getElementById('resetFilter').style.display = 'block';
+            document.getElementById('filterPill').classList.add('active');
             
             // Filter contacts
             filterContacts(interest);
@@ -671,8 +679,9 @@
         
         function resetFilter() {
             currentFilter = null;
-            document.getElementById('filterText').textContent = 'Hangout preferences';
+            document.getElementById('filterText').textContent = 'Filter by hangout activities';
             document.getElementById('resetFilter').style.display = 'none';
+            document.getElementById('filterPill').classList.remove('active');
             filterContacts(null);
         }
         
