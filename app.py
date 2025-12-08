@@ -15,7 +15,7 @@ if not DATABASE_URL:
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
-DIRECTORY_EXPIRATION = datetime(2025, 11, 8, 7, 59, 59, tzinfo=timezone.utc)  # Change this date!
+DIRECTORY_EXPIRATION = datetime(2025, 12, 15, 7, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
@@ -49,7 +49,7 @@ def get_db():
             return None
     return g.db
 
-def log_event(event_type, phone=None):
+def log_event(event_type, phone=None, metadata=None):
     """Log an event to the database"""
     db = get_db()
     if db is None:
@@ -58,9 +58,14 @@ def log_event(event_type, phone=None):
     
     try:
         cursor = db.cursor()
+        # Store metadata as JSON string in user_agent field for now (or we could add a metadata column)
+        user_agent = request.headers.get('User-Agent', '')
+        if metadata:
+            import json
+            user_agent = json.dumps({"user_agent": user_agent, "metadata": metadata})
         cursor.execute(
             'INSERT INTO logs (event_type, phone, user_agent, timestamp) VALUES (%s, %s, %s, %s)',
-            (event_type, phone, request.headers.get('User-Agent', ''), datetime.now(timezone.utc))
+            (event_type, phone, user_agent, datetime.now(timezone.utc))
         )
         cursor.close()
     except psycopg2.Error as e:
@@ -72,23 +77,291 @@ def close_db(exception=None):
     if db is not None:
         db.close()
 
+# Define all available interests by category
+INTEREST_CATEGORIES = {
+    "Outdoors": [
+        "Go on a neighborhood walk",
+        "Walk to get boba or coffee",
+        "Go on an easy hike"
+    ],
+    "Games": [
+        "Play a board game",
+        "Do a jigsaw puzzle",
+        "Play trivia at a bar"
+    ],
+    "Everyday": [
+        "Cook a simple dinner",
+        "Do some gardening or plant potting",
+        "Do a Costco run"
+    ],
+    "Explore": [
+        "Visit a museum",
+        "Explore a neighborhood in SF"
+    ],
+    "Creative": [
+        "Do a craft",
+        "Bake something"
+    ]
+}
+
+# Get all interests as a flat list for the filter dropdown
+ALL_INTERESTS = [interest for category_interests in INTEREST_CATEGORIES.values() for interest in category_interests]
+
 # Hardcode your directory data here instead of using a database
+# Each attendee can have an "interests" dict mapping interest names to True (interested) or False (not interested)
 ATTENDEES = {
-    "307-751-3953": "Zack Kawulok",
-    "727-422-0735": "Annie Ritch",
-    "858-922-2689": "Emily Petree",
-    "424-237-6852": "Eve La Puma",
-    "650-441-8589": "Gillian Hawes",
-    "650-441-7751": "Nick Cockton",
-    "617-792-6036": "Hilary Brumberg",
-    "650-531-9217": "Joel Gibson",
-    "303-917-4375": "Reid Miller",
-    "206-240-2363": "Helen",
-    "919-946-6959": "Matt Zothner",
-    "469-426-9925": "Krithika",
-    "630-804-9289": "Sean van Dril",
-    "650-609-0610": "Neetu Saini"
-    # Add more attendees here: "phone": "name"
+    "307-751-3953": {
+        "name": "Zack Kawulok",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": False,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": False,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "727-422-0735": {
+        "name": "Annie Ritch",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": False,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+    "858-922-2689": {
+        "name": "Emily Petree",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": True,
+            "Play a board game": False,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": False,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "424-237-6852": {
+        "name": "Eve La Puma",
+        "interests": {
+            "Go on a neighborhood walk": False,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": False,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+    "650-441-8589": {
+        "name": "Gillian Hawes",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": True
+        }
+    },
+    "650-441-7751": {
+        "name": "Nick Cockton",
+        "interests": {
+            "Go on a neighborhood walk": False,
+            "Walk to get boba or coffee": False,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": False,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": False,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "617-792-6036": {
+        "name": "Hilary Brumberg",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": False,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+    "650-531-9217": {
+        "name": "Joel Gibson",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": False,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "303-917-4375": {
+        "name": "Reid Miller",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+    "206-240-2363": {
+        "name": "Helen",
+        "interests": {
+            "Go on a neighborhood walk": False,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": False,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": False,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": True
+        }
+    },
+    "919-946-6959": {
+        "name": "Matt Zothner",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": False,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": False,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": False,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "469-426-9925": {
+        "name": "Krithika",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+    "630-804-9289": {
+        "name": "Sean van Dril",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": True,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": True,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": True
+        }
+    },
+    "650-609-0610": {
+        "name": "Neetu Saini",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": False,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": True,
+            "Do a Costco run": True,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": True,
+            "Do a craft": False,
+            "Bake something": True
+        }
+    }
 }
 
 def normalize_phone(phone_str):
@@ -126,13 +399,30 @@ def home():
         return redirect(url_for('login'))
     
     # Convert attendees dict to list format for template, sorted alphabetically by name
-    attendees_list = [{"phone": phone, "name": name} for phone, name in ATTENDEES.items()]
+    attendees_list = []
+    for phone, attendee_data in ATTENDEES.items():
+        if isinstance(attendee_data, dict):
+            attendees_list.append({
+                "phone": phone,
+                "name": attendee_data["name"],
+                "interests": attendee_data.get("interests", {})
+            })
+        else:
+            # Backward compatibility: if it's just a string name
+            attendees_list.append({
+                "phone": phone,
+                "name": attendee_data,
+                "interests": {}
+            })
     attendees_list.sort(key=lambda x: x["name"].lower())  # Sort alphabetically (case-insensitive)
     
     # Log page access
     log_event('directory_viewed', phone)
     
-    return render_template('directory.html', attendees=attendees_list)
+    return render_template('directory.html', 
+                         attendees=attendees_list, 
+                         interest_categories=INTEREST_CATEGORIES,
+                         all_interests=ALL_INTERESTS)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -180,6 +470,19 @@ def log_phone_click():
     
     # Log phone click event
     log_event('phone_clicked', phone)
+    
+    return jsonify({"success": True})
+
+@app.route("/log-filter", methods=["POST"])
+def log_filter():
+    phone = session.get('phone')
+    if not phone or not any(normalize_phone(attendee_phone) == phone for attendee_phone in ATTENDEES.keys()):
+        return jsonify({"error": "Not logged in"}), 401
+    
+    interest_name = request.form.get('interest', '')
+    
+    # Log filter event with interest name
+    log_event('filter_applied', phone, {"interest": interest_name})
     
     return jsonify({"success": True})
 

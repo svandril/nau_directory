@@ -134,19 +134,12 @@
         
         .contact { 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+            flex-direction: column;
             padding: 20px; 
             margin-bottom: 12px; 
             border: 1px solid #e9ecef; 
             border-radius: 8px;
             background: #f8f9fa;
-            transition: all 0.2s ease;
-        }
-        
-        .contact:hover {
-            background: #e9ecef;
-            border-color: #bef9b4;
         }
         
         .contact-info {
@@ -157,18 +150,41 @@
         /* Mobile responsive adjustments */
         @media (max-width: 600px) {
             .contact {
+                padding: 16px;
+            }
+            
+            .contact-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .contact-main {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 12px;
+                width: 100%;
             }
             
             .contact-info {
-                text-align: center;
+                text-align: left;
+                width: 100%;
             }
             
             .copy-btn {
                 width: 100%;
                 padding: 12px;
+                box-sizing: border-box;
+                margin: 0;
+            }
+            
+            .expand-caret {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+            }
+            
+            .contact {
+                position: relative;
             }
         }
         
@@ -212,14 +228,245 @@
             cursor: pointer; 
             font-weight: 500;
             transition: background-color 0.2s ease;
+            margin: 0;
+            min-width: 0;
         }
         
         .copy-btn:hover { 
             background: #a8f59c; 
         }
-        .easy-hangouts div {
-            text-indent: -1.2em;
-            padding-left: 1.2em;
+        /* Filter UI styles */
+        .filter-container {
+            padding: 0 30px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .reset-filter {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .reset-filter:hover {
+            color: #094d92;
+            text-decoration: underline;
+        }
+        
+        .filter-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 8px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #2c3e50;
+            position: relative;
+            user-select: none;
+        }
+        
+        .filter-pill:hover {
+            background: #e9ecef;
+            border-color: #bef9b4;
+        }
+        
+        .filter-pill .caret {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-left: 4px;
+            color: #6c757d;
+        }
+        
+        .filter-pill .caret svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .filter-pill .caret .chevron-down {
+            display: block;
+        }
+        
+        .filter-pill .caret .chevron-up {
+            display: none;
+        }
+        
+        .filter-pill.open .caret .chevron-down {
+            display: none;
+        }
+        
+        .filter-pill.open .caret .chevron-up {
+            display: block;
+        }
+        
+        .filter-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            min-width: 250px;
+            display: none;
+        }
+        
+        .filter-pill.open .filter-dropdown {
+            display: block;
+        }
+        
+        .filter-item {
+            padding: 12px 20px 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #2c3e50;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .filter-item:last-child {
+            border-bottom: none;
+        }
+        
+        .filter-item:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Contact expandable interests */
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .contact-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .expand-caret {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            margin-left: 12px;
+            flex-shrink: 0;
+            color: #6c757d;
+            transition: color 0.2s ease;
+        }
+        
+        .expand-caret:hover {
+            color: #094d92;
+        }
+        
+        .expand-caret svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .expand-caret .chevron-down {
+            display: block;
+        }
+        
+        .expand-caret .chevron-up {
+            display: none;
+        }
+        
+        .contact.expanded .expand-caret .chevron-down {
+            display: none;
+        }
+        
+        .contact.expanded .expand-caret .chevron-up {
+            display: block;
+        }
+        
+        .interests-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e9ecef;
+            display: none;
+            width: 100%;
+        }
+        
+        .contact.expanded .interests-section {
+            display: block;
+        }
+        
+        .hangout-preferences-header {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+        
+        .contact.expanded .contact-header {
+            flex-direction: row;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .contact.expanded .contact-main {
+            width: 100%;
+        }
+        
+        .contact.expanded .interests-section {
+            margin-left: 0;
+            padding-left: 0;
+            text-align: left;
+        }
+        
+        .interest-category {
+            margin-bottom: 20px;
+        }
+        
+        .interest-category-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .interest-item {
+            font-size: 14px;
+            margin-bottom: 6px;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .interest-item.interested {
+            color: #2c3e50;
+        }
+        
+        .interest-item.not-interested {
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .interest-item::before {
+            position: absolute;
+            left: 0;
+        }
+        
+        .interest-item.interested::before {
+            content: "✅";
+        }
+        
+        .interest-item.not-interested::before {
+            content: "❌";
         }
     </style>
 </head>
@@ -228,20 +475,10 @@
         <div class="tips">
             <h2>Tips</h2>
             <div class="tips-section">
-                <div class="tips-section-title">Best times</div>
+                <div class="tips-section-title">Best hangout times</div>
                 <div>Weekday evenings - 82%</div>
                 <div>Weekend evenings - 73%</div>
                 <div>Weekend afternoons - 64%</div>
-            </div>
-            <div class="tips-section" style="margin-top: 14px;">
-                <div class="tips-section-title">Easy hangouts</div>
-                <div class="easy-hangouts">
-                    <div>☕ <strong>Coffee</strong> — Peet’s, Coffeebar</div>
-                    <div>🧁 <strong>Treat</strong> — Levant, Tea Friends</div>
-                    <div>🍻 <strong>Drinks</strong> — Barebottle Brewing, Bar Loretta</div>
-                    <div>🏠 <strong>Host</strong> — Dessert, watch a show, board games</div>
-                    <div>🚶 <strong>Local</strong> — Walk, Farmers market</div>
-                </div>
             </div>
         </div>
         <div class="directory-card">
@@ -252,23 +489,71 @@
                         <h2>Directory</h2>
                         <span class="countdown-pill" id="countdown">Expires in <strong>--:--:--</strong></span>
                     </div>
-                    <h3>Newish Adults Unite<br>November 6, 2025</h3>
+                    <h3>Newish Adults Unite<br>December 9, 2025</h3>
                 </div>
                 <a href="/logout" class="logout">Logout</a>
             </div>
             
         </div>
         
+        <div class="filter-container" id="filterContainer">
+            <a href="#" class="reset-filter" id="resetFilter" onclick="resetFilter(); return false;" style="display: none;">Reset filter</a>
+            <div class="filter-pill" id="filterPill" onclick="toggleFilterDropdown(event)">
+                <span id="filterText">Hangout preferences</span>
+                <span class="caret">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-up">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                    </svg>
+                </span>
+                <div class="filter-dropdown" id="filterDropdown">
+                    {% for interest in all_interests %}
+                    <div class="filter-item" onclick="selectFilter('{{ interest }}', event)">{{ interest }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
         <div class="contacts-container">
             {% for attendee in attendees %}
-            <div class="contact">
-                <div class="contact-info">
-                    <div class="name">{{ attendee.name }}</div>
-                    <div class="phone" onclick="trackPhoneClick('{{ attendee.phone }}', '{{ attendee.name }}')">{{ attendee.phone }}</div>
+            <div class="contact" data-phone="{{ attendee.phone }}" data-interests='{{ attendee.interests|tojson }}'>
+                <div class="contact-header">
+                    <div class="contact-main">
+                        <div class="contact-info">
+                            <div class="name">{{ attendee.name }}</div>
+                            <div class="phone" onclick="trackPhoneClick('{{ attendee.phone }}', '{{ attendee.name }}')">{{ attendee.phone }}</div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
+                            Copy phone
+                        </button>
+                    </div>
+                    <span class="expand-caret" onclick="toggleInterests(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-up">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                        </svg>
+                    </span>
                 </div>
-                <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
-                    Copy phone
-                </button>
+                <div class="interests-section">
+                    <div class="hangout-preferences-header">Hangout preferences</div>
+                    {% for category, interests_list in interest_categories.items() %}
+                    <div class="interest-category">
+                        <div class="interest-category-title">{{ category }}</div>
+                        {% for interest in interests_list %}
+                        {% set is_interested = attendee.interests.get(interest, None) %}
+                        {% if is_interested is not none %}
+                        <div class="interest-item {% if is_interested %}interested{% else %}not-interested{% endif %}" data-interest="{{ interest }}">
+                            {{ interest }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -288,10 +573,13 @@
                 }).catch(err => console.log('Logging failed:', err));
                 
                 // Update button UI
-                let original = button.textContent;
+                let originalText = button.textContent;
+                let originalBg = button.style.backgroundColor || '#bef9b4';
                 button.textContent = "Copied!";
+                button.style.backgroundColor = '#a8f59c';
                 setTimeout(() => {
-                    button.textContent = original;
+                    button.textContent = originalText;
+                    button.style.backgroundColor = originalBg;
                 }, 1000);
             });
         }
@@ -343,6 +631,103 @@
         // Update countdown immediately and then every second
         updateCountdown();
         setInterval(updateCountdown, 1000);
+        
+        // Expandable interests functionality
+        function toggleInterests(caretElement) {
+            const contact = caretElement.closest('.contact');
+            contact.classList.toggle('expanded');
+        }
+        
+        // Filter functionality
+        let currentFilter = null;
+        
+        function toggleFilterDropdown(event) {
+            event.stopPropagation();
+            const pill = document.getElementById('filterPill');
+            pill.classList.toggle('open');
+        }
+        
+        function selectFilter(interest, event) {
+            event.stopPropagation();
+            currentFilter = interest;
+            
+            // Update filter pill text
+            document.getElementById('filterText').textContent = interest;
+            document.getElementById('filterPill').classList.remove('open');
+            document.getElementById('resetFilter').style.display = 'block';
+            
+            // Filter contacts
+            filterContacts(interest);
+            
+            // Log filter event
+            fetch('/log-filter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `interest=${encodeURIComponent(interest)}`
+            }).catch(err => console.log('Filter logging failed:', err));
+        }
+        
+        function resetFilter() {
+            currentFilter = null;
+            document.getElementById('filterText').textContent = 'Hangout preferences';
+            document.getElementById('resetFilter').style.display = 'none';
+            filterContacts(null);
+        }
+        
+        function filterContacts(interest) {
+            const contacts = document.querySelectorAll('.contact');
+            contacts.forEach(contact => {
+                if (!interest) {
+                    // Show all contacts
+                    contact.style.display = '';
+                    return;
+                }
+                
+                // Get interests from data attribute
+                const interestsJson = contact.getAttribute('data-interests');
+                if (!interestsJson) {
+                    contact.style.display = 'none';
+                    return;
+                }
+                
+                try {
+                    const interests = JSON.parse(interestsJson);
+                    // Show contact if they have this interest set to true
+                    if (interests[interest] === true) {
+                        contact.style.display = '';
+                    } else {
+                        contact.style.display = 'none';
+                    }
+                } catch (e) {
+                    contact.style.display = 'none';
+                }
+            });
+        }
+        
+        // Close filter dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const filterPill = document.getElementById('filterPill');
+            if (!filterPill.contains(event.target)) {
+                filterPill.classList.remove('open');
+            }
+        });
+        
+        // Sort interests within each category (interested first, then not interested)
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.interest-category');
+            categories.forEach(category => {
+                const items = Array.from(category.querySelectorAll('.interest-item'));
+                const interested = items.filter(item => item.classList.contains('interested'));
+                const notInterested = items.filter(item => item.classList.contains('not-interested'));
+                
+                // Clear and re-append in order
+                items.forEach(item => item.remove());
+                interested.forEach(item => category.appendChild(item));
+                notInterested.forEach(item => category.appendChild(item));
+            });
+        });
     </script>
 </body>
 </html>
