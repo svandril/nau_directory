@@ -398,6 +398,15 @@
         .contact.expanded .expand-caret .chevron-up {
             display: block;
         }
+        .chevron-slot {
+            width: 24px;
+            height: 24px;
+            margin-left: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
         .interests-section {
             margin-top: 16px;
@@ -536,15 +545,20 @@
                             Copy phone
                         </button>
                     </div>
-                    <span class="expand-caret" onclick="toggleInterests(this)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-up">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                        </svg>
-                    </span>
+                    <div class="chevron-slot">
+                        {% if attendee.interests %}
+                        <span class="expand-caret" onclick="toggleInterests(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-up">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </span>
+                        {% endif %}
+                    </div>
                 </div>
+                {% if attendee.interests %}
                 <div class="interests-section">
                     <div class="hangout-preferences-header">Hangout activities</div>
                     {% for category, interests_list in interest_categories.items() %}
@@ -561,6 +575,7 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

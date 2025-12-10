@@ -15,7 +15,7 @@ if not DATABASE_URL:
 
 # Directory expiration configuration
 # Set this to your desired expiration date/time (UTC)
-DIRECTORY_EXPIRATION = datetime(2024, 12, 15, 7, 59, 59, tzinfo=timezone.utc)  # Change this date!
+DIRECTORY_EXPIRATION = datetime(2025, 12, 15, 7, 59, 59, tzinfo=timezone.utc)  # Change this date!
 
 def get_db():
     """Get database connection"""
@@ -111,75 +111,21 @@ ALL_INTERESTS = [interest for category_interests in INTEREST_CATEGORIES.values()
 # Each attendee can have an "interests" dict mapping interest names to True (interested) or False (not interested)
 ATTENDEES = {
     "307-751-3953": {
-        "name": "Zack Kawulok",
+        "name": "Zach Kawulok",
         "interests": {
             "Go on a neighborhood walk": True,
             "Walk to get boba or coffee": False,
-            "Go on an easy hike": True,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": True,
-            "Play trivia at a bar": True,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": False,
-            "Do a Costco run": False,
-            "Visit a museum": False,
-            "Explore a neighborhood in SF": False,
-            "Do a craft": False,
-            "Bake something": False
-        }
-    },
-    "727-422-0735": {
-        "name": "Annie Ritch",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
             "Go on an easy hike": False,
             "Play a board game": True,
             "Do a jigsaw puzzle": False,
-            "Play trivia at a bar": False,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": True,
-            "Do a Costco run": False,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": True,
-            "Bake something": True
-        }
-    },
-    "858-922-2689": {
-        "name": "Emily Petree",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": True,
-            "Play a board game": False,
-            "Do a jigsaw puzzle": False,
             "Play trivia at a bar": True,
-            "Cook a simple dinner": False,
-            "Do some gardening or plant potting": False,
-            "Do a Costco run": True,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": False,
-            "Bake something": False
-        }
-    },
-    "424-237-6852": {
-        "name": "Eve La Puma",
-        "interests": {
-            "Go on a neighborhood walk": False,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": False,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": True,
-            "Play trivia at a bar": False,
             "Cook a simple dinner": True,
             "Do some gardening or plant potting": True,
             "Do a Costco run": False,
             "Visit a museum": False,
             "Explore a neighborhood in SF": False,
             "Do a craft": True,
-            "Bake something": True
+            "Bake something": False
         }
     },
     "650-441-8589": {
@@ -189,148 +135,79 @@ ATTENDEES = {
             "Walk to get boba or coffee": True,
             "Go on an easy hike": True,
             "Play a board game": True,
-            "Do a jigsaw puzzle": False,
+            "Do a jigsaw puzzle": True,
             "Play trivia at a bar": True,
             "Cook a simple dinner": True,
             "Do some gardening or plant potting": False,
             "Do a Costco run": True,
             "Visit a museum": True,
             "Explore a neighborhood in SF": True,
-            "Do a craft": False,
+            "Do a craft": True,
             "Bake something": True
         }
     },
     "650-441-7751": {
         "name": "Nick Cockton",
         "interests": {
-            "Go on a neighborhood walk": False,
+            "Go on a neighborhood walk": True,
             "Walk to get boba or coffee": False,
             "Go on an easy hike": True,
             "Play a board game": True,
-            "Do a jigsaw puzzle": True,
+            "Do a jigsaw puzzle": False,
             "Play trivia at a bar": True,
-            "Cook a simple dinner": False,
+            "Cook a simple dinner": True,
             "Do some gardening or plant potting": False,
             "Do a Costco run": False,
             "Visit a museum": False,
-            "Explore a neighborhood in SF": True,
+            "Explore a neighborhood in SF": False,
             "Do a craft": False,
-            "Bake something": False
+            "Bake something": True
         }
     },
     "617-792-6036": {
         "name": "Hilary Brumberg",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": False,
-            "Play a board game": False,
-            "Do a jigsaw puzzle": True,
-            "Play trivia at a bar": False,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": True,
-            "Do a Costco run": True,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": False,
-            "Do a craft": True,
-            "Bake something": True
-        }
-    },
-    "650-531-9217": {
-        "name": "Joel Gibson",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": False,
-            "Go on an easy hike": True,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": False,
-            "Play trivia at a bar": True,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": False,
-            "Do a Costco run": True,
-            "Visit a museum": False,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": False,
-            "Bake something": False
-        }
-    },
-    "303-917-4375": {
-        "name": "Reid Miller",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": True,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": True,
-            "Play trivia at a bar": True,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": True,
-            "Do a Costco run": True,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": True,
-            "Bake something": True
-        }
-    },
-    "206-240-2363": {
-        "name": "Helen",
-        "interests": {
-            "Go on a neighborhood walk": False,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": False,
-            "Play a board game": False,
-            "Do a jigsaw puzzle": False,
-            "Play trivia at a bar": False,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": False,
-            "Do a Costco run": False,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": False,
-            "Bake something": True
-        }
-    },
-    "919-946-6959": {
-        "name": "Matt Zothner",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": False,
-            "Go on an easy hike": True,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": False,
-            "Play trivia at a bar": True,
-            "Cook a simple dinner": False,
-            "Do some gardening or plant potting": False,
-            "Do a Costco run": False,
-            "Visit a museum": False,
-            "Explore a neighborhood in SF": True,
-            "Do a craft": False,
-            "Bake something": False
-        }
-    },
-    "469-426-9925": {
-        "name": "Krithika",
-        "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": False,
-            "Play a board game": True,
-            "Do a jigsaw puzzle": True,
-            "Play trivia at a bar": False,
-            "Cook a simple dinner": True,
-            "Do some gardening or plant potting": True,
-            "Do a Costco run": True,
-            "Visit a museum": True,
-            "Explore a neighborhood in SF": False,
-            "Do a craft": True,
-            "Bake something": True
-        }
     },
     "630-804-9289": {
         "name": "Sean van Dril",
         "interests": {
             "Go on a neighborhood walk": True,
             "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": True,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": False,
+            "Bake something": False
+        }
+    },
+    "972-786-5648": {
+        "name": "Ramya Ramachandran",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
+            "Go on an easy hike": False,
+            "Play a board game": True,
+            "Do a jigsaw puzzle": True,
+            "Play trivia at a bar": False,
+            "Cook a simple dinner": True,
+            "Do some gardening or plant potting": False,
+            "Do a Costco run": True,
+            "Visit a museum": False,
+            "Explore a neighborhood in SF": False,
+            "Do a craft": True,
+            "Bake something": True
+        }
+    },
+          "628-260-2470": {
+        "name": "Manuel Meyer",
+        "interests": {
+            "Go on a neighborhood walk": True,
+            "Walk to get boba or coffee": True,
             "Go on an easy hike": True,
             "Play a board game": True,
             "Do a jigsaw puzzle": True,
@@ -341,26 +218,29 @@ ATTENDEES = {
             "Visit a museum": True,
             "Explore a neighborhood in SF": True,
             "Do a craft": False,
-            "Bake something": True
+            "Bake something": False
         }
     },
-    "650-609-0610": {
-        "name": "Neetu Saini",
+          "816-824-6601": {
+        "name": "Vivek Ramalingum",
         "interests": {
-            "Go on a neighborhood walk": True,
-            "Walk to get boba or coffee": True,
-            "Go on an easy hike": False,
+            "Go on a neighborhood walk": False,
+            "Walk to get boba or coffee": False,
+            "Go on an easy hike": True,
             "Play a board game": True,
             "Do a jigsaw puzzle": False,
-            "Play trivia at a bar": True,
+            "Play trivia at a bar": False,
             "Cook a simple dinner": True,
-            "Do some gardening or plant potting": True,
+            "Do some gardening or plant potting": False,
             "Do a Costco run": True,
             "Visit a museum": False,
             "Explore a neighborhood in SF": True,
-            "Do a craft": False,
-            "Bake something": True
+            "Do a craft": True,
+            "Bake something": False
         }
+    },
+    "650-609-0610": {
+        "name": "Neetu Saini"
     }
 }
 
