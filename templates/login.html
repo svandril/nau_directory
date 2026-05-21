@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,8 +14,8 @@
         }
         
         body { 
-            font-family: 'Roboto Serif', serif;
-            background: #f5f5f5;
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #F8F2E1;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -37,7 +37,13 @@
             color: #2c3e50;
             font-size: 28px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 420px) {
+            h2 {
+                font-size: 22px;
+            }
         }
         
         h3 {
@@ -45,33 +51,6 @@
             font-size: 16px;
             font-weight: 400;
             margin-bottom: 30px;
-        }
-        
-        .countdown { 
-            background: #f8f9fa; 
-            border: 1px solid #e9ecef; 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin-bottom: 30px; 
-            text-align: center;
-        }
-        
-        .countdown-title { 
-            font-size: 14px; 
-            color: #6c757d; 
-            margin-bottom: 8px; 
-            font-weight: 500;
-        }
-        
-        .countdown-timer { 
-            font-size: 20px; 
-            font-weight: 700; 
-            color: #094d92; 
-        }
-        
-        .countdown-expired { 
-            color: #dc3545; 
-            font-weight: 700; 
         }
         
         .form-group { 
@@ -98,21 +77,21 @@
             color: #adb5bd;
         }
         
-        button { 
-            width: 100%; 
-            padding: 14px; 
-            background: #bef9b4; 
-            color: #2c3e50; 
-            border: none; 
-            font-size: 16px; 
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #85592B;
+            color: white;
+            border: none;
+            font-size: 16px;
             font-weight: 600;
-            cursor: pointer; 
+            cursor: pointer;
             border-radius: 8px;
             transition: background-color 0.2s ease;
         }
-        
+
         button:hover {
-            background: #a8f59c;
+            background: #6e4a23;
         }
         
         .error { 
@@ -124,14 +103,8 @@
 </head>
 <body>
     <div class="container">
-        <h2>Access Directory</h2>
-        <h3>Newish Adults Unite<br>December 9, 2025</h3>
-        
-        <div class="countdown">
-            <div class="countdown-title">Directory expires in:</div>
-            <div class="countdown-timer" id="countdown">Loading...</div>
-        </div>
-        
+        <h2>NAU Member Directory</h2>
+
         <form method="post">
             <div class="form-group">
                 <input type="tel" name="phone" placeholder="Enter your phone number" required>
@@ -144,35 +117,6 @@
     </div>
 
     <script>
-        function updateCountdown() {
-            fetch('/api/expiration')
-                .then(response => response.json())
-                .then(data => {
-                    const countdownElement = document.getElementById('countdown');
-                    
-                    if (data.expired) {
-                        countdownElement.innerHTML = '<span class="countdown-expired">Directory has expired</span>';
-                        return;
-                    }
-                    
-                    const seconds = data.seconds_until_expiration;
-                    const totalHours = Math.floor(seconds / 3600);
-                    const minutes = Math.floor((seconds % 3600) / 60);
-                    const secs = seconds % 60;
-                    const pad = (num) => num.toString().padStart(2, '0');
-                    const timeString = `${pad(totalHours)}:${pad(minutes)}:${pad(secs)}`;
-                    
-                    countdownElement.textContent = timeString;
-                })
-                .catch(error => {
-                    console.error('Error fetching expiration data:', error);
-                    document.getElementById('countdown').textContent = 'Error loading countdown';
-                });
-        }
-        
-        // Update countdown immediately and then every second
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>

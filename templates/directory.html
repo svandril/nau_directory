@@ -6,7 +6,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,8 +15,8 @@
         }
         
         body { 
-            font-family: 'Roboto Serif', serif;
-            background: #f5f5f5;
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #F8F2E1;
             min-height: 100vh;
             padding: 20px;
         }
@@ -34,27 +34,6 @@
             box-shadow: none;
         }
 
-        .tips {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 24px 28px;
-            margin-bottom: 20px;
-        }
-        .tips h2 {
-            color: #2c3e50;
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 14px;
-        }
-        .tips-section {
-            color: #585858; /* medium gray for readability */
-        }
-        .tips-section-title {
-            font-weight: 600;
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
         .title-line {
             display: flex;
             align-items: center;
@@ -63,16 +42,6 @@
             row-gap: 2px;
             margin-bottom: 4px; /* adds small spacing below when stacked */
         }
-        .countdown-text {
-            color: #7f8c8d;
-            font-size: 16px;
-            font-weight: 400;
-        }
-        .countdown-text strong {
-            font-weight: 600;
-            color: #000000;
-        }
-        
         .header-top {
             display: flex; 
             justify-content: space-between; 
@@ -106,8 +75,8 @@
         }
         
         .logout:hover {
-            color: #bef9b4;
-            border-color: #bef9b4;
+            color: #85592B;
+            border-color: #85592B;
             background: white;
         }
         
@@ -126,12 +95,33 @@
             overflow: hidden; /* makes the two sections appear as a single box with unified radii */
         }
         
-        .contact { 
-            display: flex; 
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-right: 14px;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .contact {
+            display: flex;
             flex-direction: column;
-            padding: 20px; 
-            margin-bottom: 12px; 
-            border: 1px solid #e9ecef; 
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid #e9ecef;
             border-radius: 8px;
             background: #f8f9fa;
         }
@@ -145,40 +135,38 @@
         @media (max-width: 600px) {
             .contact {
                 padding: 16px;
+                position: relative;
             }
-            
-            .contact-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
+
             .contact-main {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
+                flex-wrap: wrap;
+                column-gap: 10px;
+                row-gap: 16px;
                 width: 100%;
             }
-            
+
+            .avatar {
+                flex-shrink: 0;
+                margin-right: 2px;
+            }
+
             .contact-info {
-                text-align: left;
-                width: 100%;
+                flex: 1;
+                min-width: 0;
             }
-            
+
             .copy-btn {
                 width: 100%;
                 padding: 12px;
                 box-sizing: border-box;
                 margin: 0;
+                flex-basis: 100%;
             }
-            
+
             .expand-caret {
                 position: absolute;
                 top: 16px;
                 right: 16px;
-            }
-            
-            .contact {
-                position: relative;
             }
         }
         
@@ -214,21 +202,21 @@
             content: '';
         }
         
-        .copy-btn { 
-            padding: 10px 16px; 
-            background: #bef9b4; 
-            color: #2c3e50; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
+        .copy-btn {
+            padding: 10px 16px;
+            background: #85592B;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
             font-weight: 500;
             transition: background-color 0.2s ease;
             margin: 0;
             min-width: 0;
         }
-        
-        .copy-btn:hover { 
-            background: #a8f59c; 
+
+        .copy-btn:hover {
+            background: #6e4a23;
         }
         /* Filter UI styles */
         .filter-container {
@@ -273,12 +261,12 @@
         }
         .filter-pill.active {
             background: #e9ecef;
-            border-color: #bef9b4;
+            border-color: #85592B;
         }
-        
+
         .filter-pill:hover {
             background: #e9ecef;
-            border-color: #bef9b4;
+            border-color: #85592B;
         }
         
         .filter-pill .caret {
@@ -420,11 +408,18 @@
             display: block;
         }
         
-        .hangout-preferences-header {
-            font-weight: 600;
-            font-size: 14px;
+        .bio-prompt {
+            font-size: 12px;
+            color: #999;
+            margin: 0 0 6px 0;
+        }
+
+        .bio-text {
+            font-family: 'IBM Plex Serif', serif;
+            font-size: 20px;
             color: #2c3e50;
-            margin-bottom: 16px;
+            line-height: 1.4;
+            margin: 0;
         }
         
         .contact.expanded .contact-header {
@@ -481,72 +476,89 @@
         .interest-item.interested::before {
             content: "✅";
         }
-        
+
         .interest-item.not-interested::before {
             content: "❌";
+        }
+
+        #photoModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #333;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #photoModal.open {
+            display: flex;
+        }
+
+        #photoModalImg {
+            max-width: 85vw;
+            max-height: 85vh;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        #photoModalClose {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 36px;
+            line-height: 1;
+            cursor: pointer;
+            width: auto;
+            padding: 0 8px;
+            font-weight: 300;
+        }
+
+        #photoModalClose:hover {
+            background: none;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="tips">
-            <h2>Tips</h2>
-            <div class="tips-section">
-                <div class="tips-section-title">Best hangout times</div>
-                <div>Weekday evenings - 82%</div>
-                <div>Weekend evenings - 73%</div>
-                <div>Weekend afternoons - 64%</div>
-            </div>
-        </div>
         <div class="directory-card">
         <div class="header">
             <div class="header-top">
                 <div>
                     <div class="title-line">
-                        <h2>Directory</h2>
+                        <h2>Member Directory</h2>
                     </div>
-                    <h3>Newish Adults Unite<br>December 9, 2025<br><span class="countdown-text" id="countdown">⏳ Expires in: <strong>--:--:--</strong></span></h3>
                 </div>
                 <a href="/logout" class="logout">Logout</a>
             </div>
             
         </div>
         
-        <div class="filter-container" id="filterContainer">
-            <a href="#" class="reset-filter" id="resetFilter" onclick="resetFilter(); return false;" style="display: none;">Reset filter</a>
-            <div class="filter-pill" id="filterPill" onclick="toggleFilterDropdown(event)">
-                <span id="filterText">Filter by hangout activities</span>
-                <span class="caret">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-up">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                    </svg>
-                </span>
-                <div class="filter-dropdown" id="filterDropdown">
-                    {% for interest in all_interests %}
-                    <div class="filter-item" onclick="selectFilter('{{ interest }}', event)">{{ interest }}</div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
         
         <div class="contacts-container">
             {% for attendee in attendees %}
-            <div class="contact" data-phone="{{ attendee.phone }}" data-interests='{{ attendee.interests|tojson }}'>
+            <div class="contact" data-phone="{{ attendee.phone }}">
                 <div class="contact-header">
                     <div class="contact-main">
+                        {% if attendee.photo_url %}
+                        <div class="avatar avatar-photo" onclick="openPhotoModal('{{ attendee.photo_url }}', '{{ attendee.name }}')" style="cursor:pointer;"><img src="{{ attendee.photo_url }}" alt="{{ attendee.name }}"></div>
+                        {% else %}
+                        <div class="avatar" data-name="{{ attendee.name }}"></div>
+                        {% endif %}
                         <div class="contact-info">
                             <div class="name">{{ attendee.name }}</div>
                             <div class="phone" onclick="trackPhoneClick('{{ attendee.phone }}', '{{ attendee.name }}')">{{ attendee.phone }}</div>
                         </div>
-                        <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', this)">
+                        <button class="copy-btn" onclick="copyToClipboard('{{ attendee.phone }}', '{{ attendee.phone }}', '{{ attendee.name }}', this)">
                             Copy phone
                         </button>
                     </div>
                     <div class="chevron-slot">
-                        {% if attendee.interests %}
+                        {% if attendee.bio %}
                         <span class="expand-caret" onclick="toggleInterests(this)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="chevron-down">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -558,22 +570,10 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if attendee.interests %}
+                {% if attendee.bio %}
                 <div class="interests-section">
-                    <div class="hangout-preferences-header">Hangout activities</div>
-                    {% for category, interests_list in interest_categories.items() %}
-                    <div class="interest-category">
-                        <div class="interest-category-title">{{ category }}</div>
-                        {% for interest in interests_list %}
-                        {% set is_interested = attendee.interests.get(interest, None) %}
-                        {% if is_interested is not none %}
-                        <div class="interest-item {% if is_interested %}interested{% else %}not-interested{% endif %}" data-interest="{{ interest }}">
-                            {{ interest }}
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
+                    <p class="bio-prompt">Things I enjoy doing</p>
+                    <p class="bio-text">{{ attendee.bio }}</p>
                 </div>
                 {% endif %}
             </div>
@@ -582,176 +582,93 @@
         </div>
     </div>
 
+    <div id="photoModal" onclick="closePhotoModal()">
+        <button id="photoModalClose" onclick="closePhotoModal()">&times;</button>
+        <img id="photoModalImg" src="" alt="" onclick="event.stopPropagation()">
+    </div>
+
     <script>
-        function copyToClipboard(text, contactPhone, button) {
+        function copyToClipboard(text, contactPhone, contactName, button) {
             navigator.clipboard.writeText(text).then(() => {
-                // Log the copy event to server
                 fetch('/copy', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `contact=${contactPhone}`
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `phone=${encodeURIComponent(contactPhone)}&name=${encodeURIComponent(contactName)}`
                 }).catch(err => console.log('Logging failed:', err));
-                
-                // Update button UI
-                let originalText = button.textContent;
-                let originalBg = button.style.backgroundColor || '#bef9b4';
+
+                // Lock the button width before changing text so it doesn't shrink
+                button.style.width = button.offsetWidth + 'px';
                 button.textContent = "Copied!";
-                button.style.backgroundColor = '#a8f59c';
                 setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.backgroundColor = originalBg;
-                }, 1000);
+                    button.textContent = "Copy phone";
+                    button.style.width = '';
+                }, 1500);
             });
         }
         
         function trackPhoneClick(phone, name) {
-            // Log the phone click event to server
             fetch('/log-phone-click', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `phone=${phone}&name=${encodeURIComponent(name)}`
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `phone=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}`
             }).catch(err => console.log('Phone click logging failed:', err));
-            
-            // Open the SMS app (works on mobile)
             window.location.href = `sms:${phone}`;
         }
         
-        function updateCountdown() {
-            fetch('/api/expiration')
-                .then(response => response.json())
-                .then(data => {
-                    const countdownElement = document.getElementById('countdown');
-                    
-                    if (data.expired) {
-                        countdownElement.innerHTML = '<strong>Expired</strong>';
-                        // Redirect to expired page after a short delay
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                        return;
-                    }
-                    
-                    const seconds = data.seconds_until_expiration;
-                    const totalHours = Math.floor(seconds / 3600);
-                    const minutes = Math.floor((seconds % 3600) / 60);
-                    const secs = seconds % 60;
-                    const pad = (num) => num.toString().padStart(2, '0');
-                    const timeString = `${pad(totalHours)}:${pad(minutes)}:${pad(secs)}`;
-                    
-                    countdownElement.innerHTML = `⏳ Expires in: <strong>${timeString}</strong>`;
-                })
-                .catch(error => {
-                    console.error('Error fetching expiration data:', error);
-                    document.getElementById('countdown').textContent = 'Error loading countdown';
-                });
+        // Photo modal
+        function openPhotoModal(src, name) {
+            document.getElementById('photoModalImg').src = src;
+            document.getElementById('photoModalImg').alt = name;
+            document.getElementById('photoModal').classList.add('open');
+            fetch('/log-photo-open', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `name=${encodeURIComponent(name)}`
+            }).catch(err => console.log('Photo open logging failed:', err));
         }
-        
-        // Update countdown immediately and then every second
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        
-        // Expandable interests functionality
+
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.remove('open');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePhotoModal();
+        });
+
+        // Initials avatars
+        const avatarColors = [
+            '#85592B', '#6B7F5E', '#4A6FA5', '#8B5E6B',
+            '#5E7A6B', '#7A5E8B', '#6B6B3A', '#3A6B6B'
+        ];
+        function hashName(name) {
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            return Math.abs(hash);
+        }
+        function getInitials(name) {
+            return name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+        }
+        document.querySelectorAll('.avatar[data-name]').forEach(el => {
+            const name = el.getAttribute('data-name');
+            el.style.backgroundColor = avatarColors[hashName(name) % avatarColors.length];
+            el.textContent = getInitials(name);
+        });
+
+        // Expandable bio functionality
         function toggleInterests(caretElement) {
             const contact = caretElement.closest('.contact');
+            const isExpanding = !contact.classList.contains('expanded');
             contact.classList.toggle('expanded');
-        }
-        
-        // Filter functionality
-        let currentFilter = null;
-        
-        function toggleFilterDropdown(event) {
-            event.stopPropagation();
-            const pill = document.getElementById('filterPill');
-            pill.classList.toggle('open');
-        }
-        
-        function selectFilter(interest, event) {
-            event.stopPropagation();
-            currentFilter = interest;
-            
-            // Update filter pill text
-            document.getElementById('filterText').textContent = interest;
-            document.getElementById('filterPill').classList.remove('open');
-            document.getElementById('resetFilter').style.display = 'block';
-            document.getElementById('filterPill').classList.add('active');
-            
-            // Filter contacts
-            filterContacts(interest);
-            
-            // Log filter event
-            fetch('/log-filter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `interest=${encodeURIComponent(interest)}`
-            }).catch(err => console.log('Filter logging failed:', err));
-        }
-        
-        function resetFilter() {
-            currentFilter = null;
-            document.getElementById('filterText').textContent = 'Filter by hangout activities';
-            document.getElementById('resetFilter').style.display = 'none';
-            document.getElementById('filterPill').classList.remove('active');
-            filterContacts(null);
-        }
-        
-        function filterContacts(interest) {
-            const contacts = document.querySelectorAll('.contact');
-            contacts.forEach(contact => {
-                if (!interest) {
-                    // Show all contacts
-                    contact.style.display = '';
-                    return;
-                }
-                
-                // Get interests from data attribute
-                const interestsJson = contact.getAttribute('data-interests');
-                if (!interestsJson) {
-                    contact.style.display = 'none';
-                    return;
-                }
-                
-                try {
-                    const interests = JSON.parse(interestsJson);
-                    // Show contact if they have this interest set to true
-                    if (interests[interest] === true) {
-                        contact.style.display = '';
-                    } else {
-                        contact.style.display = 'none';
-                    }
-                } catch (e) {
-                    contact.style.display = 'none';
-                }
-            });
-        }
-        
-        // Close filter dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const filterPill = document.getElementById('filterPill');
-            if (!filterPill.contains(event.target)) {
-                filterPill.classList.remove('open');
+            if (isExpanding) {
+                const name = contact.querySelector('.name').textContent;
+                fetch('/log-bio-expand', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `name=${encodeURIComponent(name)}`
+                }).catch(err => console.log('Bio expand logging failed:', err));
             }
-        });
+        }
         
-        // Sort interests within each category (interested first, then not interested)
-        document.addEventListener('DOMContentLoaded', function() {
-            const categories = document.querySelectorAll('.interest-category');
-            categories.forEach(category => {
-                const items = Array.from(category.querySelectorAll('.interest-item'));
-                const interested = items.filter(item => item.classList.contains('interested'));
-                const notInterested = items.filter(item => item.classList.contains('not-interested'));
-                
-                // Clear and re-append in order
-                items.forEach(item => item.remove());
-                interested.forEach(item => category.appendChild(item));
-                notInterested.forEach(item => category.appendChild(item));
-            });
-        });
     </script>
 </body>
 </html>
