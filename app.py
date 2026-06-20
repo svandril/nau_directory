@@ -119,9 +119,11 @@ ATTENDEES = {
     },
     "215-910-7554": {
         "name": "Cezar Gherghel",
+        "bio": "squash, fishing (trying to), pickleball",
     },
     "630-804-9289": {
         "name": "Sean van Dril",
+        "bio": "Seeing movies in theaters, tossing a frisbee, late night hangs at diners",
     },
 }
 
