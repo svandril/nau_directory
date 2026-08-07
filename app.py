@@ -76,20 +76,6 @@ def close_db(exception=None):
 # Hardcode your directory data here instead of using a database
 # Each attendee can have an "interests" dict mapping interest names to True (interested) or False (not interested)
 ATTENDEES = {
-    "303-917-4375": {
-        "name": "Reid Miller",
-    },
-    "617-792-6036": {
-        "name": "Hilary Brumberg",
-        "bio": "Anything outside (hike, bike, neighborhood walk, park picnic, etc) and eat yummy food (gluten free)!",
-    },
-    "607-271-1316": {
-        "name": "Katey Collins",
-    },
-    "727-422-0735": {
-        "name": "Annie Ritch",
-        "bio": "Moderately experimental baking, carrying textbooks up hills (hiking weight training), drinking tea, walking to boba shops/bakeries/tasty treats",
-    },
     "628-260-2470": {
         "name": "Manuel Meyer",
         "bio": "Running, swimming, hiking, hanging at a cafe, board games.",
@@ -102,9 +88,6 @@ ATTENDEES = {
         "name": "Lina Saleh",
         "bio": "Hanging out with friends, going on walks, hiking (light to moderate), Barry's, yoga, watching tv shows/documentaries, having thought provoking conversations, learning from different cultures and experiences.",
     },
-    "919-946-6959": {
-        "name": "Matt Zothner",
-    },
     "650-441-7751": {
         "name": "Nick Cockton",
         "bio": "Running, hiking, grabbing dinner, seeing a movie.",
@@ -112,14 +95,6 @@ ATTENDEES = {
     "650-441-8589": {
         "name": "Gillian Hawes",
         "bio": "Taking spin (cycling) classes, playing board games, pub trivia nights, hiking",
-    },
-    "424-237-6852": {
-        "name": "Eve La Puma",
-        "bio": "I love seeing plays, jamming out making music, playing board games",
-    },
-    "215-910-7554": {
-        "name": "Cezar Gherghel",
-        "bio": "squash, fishing (trying to), pickleball",
     },
     "630-804-9289": {
         "name": "Sean van Dril",
