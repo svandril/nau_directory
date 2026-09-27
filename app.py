@@ -1,11 +1,16 @@
 import psycopg2
 import psycopg2.extras
 import os
+import secrets
 from datetime import datetime, timezone
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify, g
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.secret_key = 'your-secret-key-change-this'  # Change this!
+app.secret_key = os.environ.get('SECRET_KEY')
+if not app.secret_key:
+    # Random per-process key: sessions stay secure but reset on every restart/deploy
+    print("Warning: SECRET_KEY not set. Using a random key; logins won't survive restarts.")
+    app.secret_key = secrets.token_hex(32)
 
 # Database configuration
 DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -99,6 +104,24 @@ ATTENDEES = {
     "630-804-9289": {
         "name": "Sean van Dril",
         "bio": "Seeing movies in theaters, tossing a frisbee, late night hangs at diners",
+    },
+    "540-449-6684": {
+        "name": "Gabriel Borba",
+    },
+    "916-471-9009": {
+        "name": "Jeremy Ingham",
+    },
+    "610-226-1014": {
+        "name": "Yezi Yang",
+    },
+    "561-932-7782": {
+        "name": "Arielle Augustin",
+    },
+    "650-218-6788": {
+        "name": "Jeffrey Pang",
+    },
+    "216-855-2566": {
+        "name": "Evelyn Ting",
     },
 }
 

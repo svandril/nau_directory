@@ -16,7 +16,7 @@
         
         body { 
             font-family: 'IBM Plex Sans', sans-serif;
-            background: #F8F2E1;
+            background: #EAF6ED;
             min-height: 100vh;
             padding: 20px;
         }
@@ -75,8 +75,8 @@
         }
         
         .logout:hover {
-            color: #85592B;
-            border-color: #85592B;
+            color: #64983A;
+            border-color: #64983A;
             background: white;
         }
         
@@ -204,7 +204,7 @@
         
         .copy-btn {
             padding: 10px 16px;
-            background: #85592B;
+            background: #64983A;
             color: white;
             border: none;
             border-radius: 6px;
@@ -216,125 +216,8 @@
         }
 
         .copy-btn:hover {
-            background: #6e4a23;
+            background: #527D30;
         }
-        /* Filter UI styles */
-        .filter-container {
-            padding: 0 30px 20px;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-end;
-            column-gap: 8px;
-        }
-        
-        .reset-filter {
-            color: #6c757d;
-            text-decoration: none;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 500;
-            white-space: normal;
-            max-width: none;
-            text-align: right;
-            line-height: 1.2;
-        }
-        
-        .reset-filter:hover {
-            color: #094d92;
-            text-decoration: underline;
-        }
-        
-        .filter-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0px;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 8px 16px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #2c3e50;
-            position: relative;
-            user-select: none;
-        }
-        .filter-pill.active {
-            background: #e9ecef;
-            border-color: #85592B;
-        }
-
-        .filter-pill:hover {
-            background: #e9ecef;
-            border-color: #85592B;
-        }
-        
-        .filter-pill .caret {
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            margin-left: 4px;
-            color: #6c757d;
-        }
-        
-        .filter-pill .caret svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        
-        .filter-pill .caret .chevron-down {
-            display: block;
-        }
-        
-        .filter-pill .caret .chevron-up {
-            display: none;
-        }
-        
-        .filter-pill.open .caret .chevron-down {
-            display: none;
-        }
-        
-        .filter-pill.open .caret .chevron-up {
-            display: block;
-        }
-        
-        .filter-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 1000;
-            min-width: 100%;
-            width: 100%;
-            display: none;
-        }
-        
-        .filter-pill.open .filter-dropdown {
-            display: block;
-        }
-        
-        .filter-item {
-            padding: 12px 20px 12px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #2c3e50;
-            border-bottom: 1px solid #f8f9fa;
-        }
-        
-        .filter-item:last-child {
-            border-bottom: none;
-        }
-        
-        .filter-item:hover {
-            background: #f8f9fa;
-        }
-        
         /* Contact expandable interests */
         .contact-header {
             display: flex;
@@ -438,49 +321,6 @@
             text-align: left;
         }
         
-        .interest-category {
-            margin-bottom: 20px;
-        }
-        
-        .interest-category-title {
-            font-weight: 600;
-            font-size: 14px;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        
-        .interest-item {
-            font-size: 14px;
-            margin-bottom: 0;
-            padding-left: 24px;
-            position: relative;
-            line-height: 1.5;
-        }
-        
-        .interest-item.interested {
-            color: #2c3e50;
-        }
-        
-        .interest-item.not-interested {
-            color: #999;
-            text-decoration: line-through;
-        }
-        
-        .interest-item::before {
-            position: absolute;
-            left: 0;
-            top: 0.1em;
-            line-height: inherit;
-        }
-        
-        .interest-item.interested::before {
-            content: "✅";
-        }
-
-        .interest-item.not-interested::before {
-            content: "❌";
-        }
-
         #photoModal {
             display: none;
             position: fixed;
